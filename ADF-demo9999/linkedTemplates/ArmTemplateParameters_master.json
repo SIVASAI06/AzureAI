@@ -5,6 +5,21 @@
 		"factoryName": {
 			"value": "ADF-demo9999"
 		},
+		"AdvworksdbLS_password": {
+			"value": ""
+		},
+		"ProductJson_connectionString": {
+			"value": ""
+		},
+		"AdvworksdbLS_properties_typeProperties_server": {
+			"value": "dssquad.database.windows.net"
+		},
+		"AdvworksdbLS_properties_typeProperties_database": {
+			"value": "SSDB"
+		},
+		"AdvworksdbLS_properties_typeProperties_userName": {
+			"value": "sivasai"
+		},
 		"containerUri": {
 			"value": ""
 		},

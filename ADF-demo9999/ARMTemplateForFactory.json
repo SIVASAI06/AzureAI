@@ -6,6 +6,26 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "ADF-demo9999"
+		},
+		"AdvworksdbLS_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AdvworksdbLS'"
+		},
+		"ProductJson_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ProductJson'"
+		},
+		"AdvworksdbLS_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "dssquad.database.windows.net"
+		},
+		"AdvworksdbLS_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "SSDB"
+		},
+		"AdvworksdbLS_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sivasai"
 		}
 	},
 	"variables": {
@@ -26,12 +46,155 @@
 						"typeProperties": {
 							"waitTimeInSeconds": 1
 						}
+					},
+					{
+						"name": "CopyProducts",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "WaitCopy",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "AdvworksProducts",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ProdtoJson",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
 				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/AdvworksProducts')]",
+				"[concat(variables('factoryId'), '/datasets/ProdtoJson')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AdvworksProducts')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdvworksdbLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "SalesLT",
+					"table": "Product"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AdvworksdbLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ProdtoJson')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ProductJson",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "product"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ProductJson')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AdvworksdbLS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('AdvworksdbLS_properties_typeProperties_server')]",
+					"database": "[parameters('AdvworksdbLS_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AdvworksdbLS_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AdvworksdbLS_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ProductJson')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('ProductJson_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SelfHostedIR')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
 			},
 			"dependsOn": []
 		}
