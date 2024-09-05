@@ -19,7 +19,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "WaiCopy",
+						"name": "WaitCopy",
 						"type": "Wait",
 						"dependsOn": [],
 						"userProperties": [],
