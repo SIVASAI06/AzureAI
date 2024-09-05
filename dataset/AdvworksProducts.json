@@ -1,0 +1,16 @@
+{
+	"name": "AdvworksProducts",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AdvworksdbLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "SalesLT",
+			"table": "Product"
+		}
+	}
+}
