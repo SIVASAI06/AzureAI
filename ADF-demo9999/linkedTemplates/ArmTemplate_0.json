@@ -133,7 +133,10 @@
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
-							"waitTimeInSeconds": 1
+							"waitTimeInSeconds": {
+								"value": "@pipeline().parameters.WaitSeconds",
+								"type": "Expression"
+							}
 						}
 					},
 					{
@@ -170,7 +173,165 @@
 									"type": "JsonWriteSettings"
 								}
 							},
-							"enableStaging": false
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ProductID",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['ProductID']"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Name']"
+										}
+									},
+									{
+										"source": {
+											"name": "ProductNumber",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['ProductNumber']"
+										}
+									},
+									{
+										"source": {
+											"name": "Color",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Color']"
+										}
+									},
+									{
+										"source": {
+											"name": "StandardCost",
+											"type": "Decimal"
+										},
+										"sink": {
+											"path": "$['StandardCost']"
+										}
+									},
+									{
+										"source": {
+											"name": "ListPrice",
+											"type": "Decimal"
+										},
+										"sink": {
+											"path": "$['ListPrice']"
+										}
+									},
+									{
+										"source": {
+											"name": "Size",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Size']"
+										}
+									},
+									{
+										"source": {
+											"name": "Weight",
+											"type": "Decimal"
+										},
+										"sink": {
+											"path": "$['Weight']"
+										}
+									},
+									{
+										"source": {
+											"name": "ProductCategoryID",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['ProductCategoryID']"
+										}
+									},
+									{
+										"source": {
+											"name": "ProductModelID",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['ProductModelID']"
+										}
+									},
+									{
+										"source": {
+											"name": "SellStartDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"path": "$['SellStartDate']"
+										}
+									},
+									{
+										"source": {
+											"name": "SellEndDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"path": "$['SellEndDate']"
+										}
+									},
+									{
+										"source": {
+											"name": "DiscontinuedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"path": "$['DiscontinuedDate']"
+										}
+									},
+									{
+										"source": {
+											"name": "ThumbNailPhoto",
+											"type": "Byte[]"
+										},
+										"sink": {
+											"path": "$['ThumbNailPhoto']"
+										}
+									},
+									{
+										"source": {
+											"name": "ThumbnailPhotoFileName",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['ThumbnailPhotoFileName']"
+										}
+									},
+									{
+										"source": {
+											"name": "rowguid",
+											"type": "Guid"
+										},
+										"sink": {
+											"path": "$['rowguid']"
+										}
+									},
+									{
+										"source": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"path": "$['ModifiedDate']"
+										}
+									}
+								]
+							}
 						},
 						"inputs": [
 							{
@@ -190,6 +351,12 @@
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"WaitSeconds": {
+						"type": "int",
+						"defaultValue": 1
+					}
 				},
 				"annotations": []
 			},
