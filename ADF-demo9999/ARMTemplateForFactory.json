@@ -468,6 +468,8 @@
 						"AdvworksStream derive(Markup = ListPrice/StandardCost) ~> CalculatedMarkup",
 						"CalculatedMarkup sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
+						"     partitionFileNames:['products.json'],",
+						"     truncate: true,",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> ProductswithMarkup"
 					]
