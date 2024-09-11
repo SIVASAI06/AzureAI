@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "Adf-gen2"
+		},
+		"ADLSGen2_connectionString": {
+			"value": ""
+		},
+		"AzureDBLS_password": {
+			"value": ""
+		},
+		"AzureDLSLS_accountKey": {
+			"value": ""
+		},
+		"AzureDBLS_properties_typeProperties_server": {
+			"value": "adfgen2.database.windows.net"
+		},
+		"AzureDBLS_properties_typeProperties_database": {
+			"value": "taxi-data"
+		},
+		"AzureDBLS_properties_typeProperties_userName": {
+			"value": "sivasai"
+		},
+		"AzureDLSLS_properties_typeProperties_url": {
+			"value": "https://dbtogen2.dfs.core.windows.net/"
+		}
+	}
+}
