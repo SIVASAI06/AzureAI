@@ -19,7 +19,15 @@
 					"name": "TripFaresSQL"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Gen2",
+						"type": "DatasetReference"
+					},
+					"name": "gen2sink"
+				}
+			],
 			"transformations": [
 				{
 					"name": "InnerJoinwithTripFares"
@@ -76,7 +84,14 @@
 				"     broadcast: 'auto')~> InnerJoinwithTripFares",
 				"InnerJoinwithTripFares aggregate(groupBy(payment_type),",
 				"     average_fare = avg(toInteger(total_amount)),",
-				"          total_trip_distance = sum(toInteger(trip_distance))) ~> AggregateByPaymentType"
+				"          total_trip_distance = sum(toInteger(trip_distance))) ~> AggregateByPaymentType",
+				"AggregateByPaymentType sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> gen2sink"
 			]
 		}
 	}
