@@ -75,7 +75,8 @@
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> InnerJoinwithTripFares",
 				"InnerJoinwithTripFares aggregate(groupBy(payment_type),",
-				"     {} = ERROR_FUNCTION('')) ~> AggregateByPaymentType"
+				"     average_fare = avg(toInteger(trip_distance)),",
+				"          total_trip_distance = sum(toInteger(trip_distance))) ~> AggregateByPaymentType"
 			]
 		}
 	}
