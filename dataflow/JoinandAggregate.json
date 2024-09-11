@@ -74,7 +74,7 @@
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> InnerJoinwithTripFares",
-				"InnerJoinwithTripFares aggregate() ~> AggregateByPaymentType"
+				"InnerJoinwithTripFares aggregate(groupBy(payment_type)) ~> AggregateByPaymentType"
 			]
 		}
 	}
