@@ -43,7 +43,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "AzureSqlDB",
+						"referenceName": "TripDataAzureDB",
 						"type": "DatasetReference"
 					}
 				],

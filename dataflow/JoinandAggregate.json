@@ -6,14 +6,14 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "AzureSqlDB",
+						"referenceName": "TripDataAzureDB",
 						"type": "DatasetReference"
 					},
 					"name": "TripdataCSV"
 				},
 				{
 					"dataset": {
-						"referenceName": "AzureSqlDB",
+						"referenceName": "TripDataAzureDB",
 						"type": "DatasetReference"
 					},
 					"name": "TripFaresSQL"

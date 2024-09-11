@@ -1,5 +1,5 @@
 {
-	"name": "TripDataAzureDB",
+	"name": "TripAzurFaresDB",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDBLS",
@@ -21,53 +21,41 @@
 				"type": "nvarchar"
 			},
 			{
-				"name": "rate_code",
-				"type": "nvarchar"
-			},
-			{
-				"name": "store_and_fwd_flag",
-				"type": "nvarchar"
-			},
-			{
 				"name": "pickup_datetime",
 				"type": "nvarchar"
 			},
 			{
-				"name": "dropoff_datetime",
+				"name": "payment_type",
 				"type": "nvarchar"
 			},
 			{
-				"name": "passenger_count",
+				"name": "fare_amount",
 				"type": "nvarchar"
 			},
 			{
-				"name": "trip_time_in_secs",
+				"name": "surcharge",
 				"type": "nvarchar"
 			},
 			{
-				"name": "trip_distance",
+				"name": "mta_tax",
 				"type": "nvarchar"
 			},
 			{
-				"name": "pickup_longitude",
+				"name": "tip_amount",
 				"type": "nvarchar"
 			},
 			{
-				"name": "pickup_latitude",
+				"name": "tolls_amount",
 				"type": "nvarchar"
 			},
 			{
-				"name": "dropoff_longitude",
-				"type": "nvarchar"
-			},
-			{
-				"name": "dropoff_latitude",
+				"name": "total_amount",
 				"type": "nvarchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "TripData"
+			"table": "TripFares"
 		}
 	}
 }
