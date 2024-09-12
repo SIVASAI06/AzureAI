@@ -21,6 +21,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "CosmosDbNoSqlContainer1",
+						"type": "DatasetReference"
+					},
 					"name": "sink1"
 				}
 			],
@@ -122,8 +126,24 @@
 				"          each(match(instr(name, 'OrderQty')==0&&instr(name, 'UnitPrice')==0&&instr(name,'SalesOrderID')==0), $$ = first($$))) ~> CreateArrays",
 				"CreateArrays sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'document',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          SalesOrderID,",
+				"          details,",
+				"          SalesOrderDetailID,",
+				"          OrderDate,",
+				"          Status,",
+				"          SalesOrderNumber,",
+				"          ShipMethod,",
+				"          TotalDue,",
+				"          orderdetailsstruct",
+				"     )) ~> sink1"
 			]
 		}
 	}
