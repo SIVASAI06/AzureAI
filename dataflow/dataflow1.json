@@ -100,7 +100,9 @@
 				"          OrderDate,",
 				"          Status,",
 				"          SalesOrderNumber,",
-				"          ShipMethod = ShipMethodID",
+				"          ShipMethod = ShipMethodID,",
+				"          TotalDue,",
+				"          orderdetailsstruct = orderfdetailsstruct",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> ColumnScrubber"
