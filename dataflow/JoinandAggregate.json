@@ -22,7 +22,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "AzureSynapseAnalyticsTable1",
+						"referenceName": "SynapseAnalyticsLS",
 						"type": "DatasetReference"
 					},
 					"name": "gen2sink"
