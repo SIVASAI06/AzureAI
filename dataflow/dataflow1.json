@@ -35,6 +35,9 @@
 				},
 				{
 					"name": "ValueScrubber"
+				},
+				{
+					"name": "CreateArrays"
 				}
 			],
 			"scriptLines": [
@@ -109,7 +112,8 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> ColumnScrubber",
-				"ColumnScrubber derive(TotalDue = ERROR_FUNCTION('')) ~> ValueScrubber"
+				"ColumnScrubber derive(TotalDue = toDouble(round(TotalDue,2))) ~> ValueScrubber",
+				"ValueScrubber aggregate() ~> CreateArrays"
 			]
 		}
 	}
