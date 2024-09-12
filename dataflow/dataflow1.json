@@ -32,6 +32,9 @@
 				},
 				{
 					"name": "ColumnScrubber"
+				},
+				{
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -105,7 +108,8 @@
 				"          orderdetailsstruct = orderfdetailsstruct",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> ColumnScrubber"
+				"     skipDuplicateMapOutputs: true) ~> ColumnScrubber",
+				"ColumnScrubber derive() ~> derivedColumn1"
 			]
 		}
 	}
