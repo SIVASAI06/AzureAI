@@ -81,6 +81,7 @@
 				"     format: 'query') ~> SourceOrderHeader",
 				"SourceOrderDetails derive(UnitPrice = toDouble(round(UnitPrice,2))) ~> TypeCast",
 				"TypeCast derive(orderfdetailsstruct = @(orderqty=,",
+				"          unitcost,",
 				"          unitcost=)) ~> MakeStruct"
 			]
 		}
