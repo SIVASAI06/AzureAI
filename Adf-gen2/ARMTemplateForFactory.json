@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDLSLS'"
 		},
+		"AzureSynapseAnalytics1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSynapseAnalytics1'"
+		},
 		"AzureDBLS_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "adfgen2.database.windows.net"
@@ -34,6 +38,18 @@
 		"AzureDLSLS_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dbtogen2.dfs.core.windows.net/"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "wsgen2-ondemand.sql.azuresynapse.net"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "SQLDW"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sivasai"
 		}
 	},
 	"variables": {
@@ -87,7 +103,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "AzureSqlDB",
+								"referenceName": "TripDataAzureDB",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -99,6 +115,44 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "JoinandAggregateData",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "IngestIntoADLS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "JoinandAggregate",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"TripdataCSV": {},
+									"TripFaresSQL": {},
+									"gen2sink": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
 					}
 				],
 				"policy": {
@@ -107,12 +161,107 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/AzureSqlDB')]",
-				"[concat(variables('factoryId'), '/datasets/Gen2')]"
+				"[concat(variables('factoryId'), '/datasets/TripDataAzureDB')]",
+				"[concat(variables('factoryId'), '/datasets/Gen2')]",
+				"[concat(variables('factoryId'), '/dataflows/JoinandAggregate')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/AzureSqlDB')]",
+			"name": "[concat(parameters('factoryName'), '/Gen2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDLSLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "products.csv",
+						"fileSystem": "dbtripdata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDLSLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TripAzurFaresDB')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDBLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "medallion",
+						"type": "nvarchar"
+					},
+					{
+						"name": "hack_license",
+						"type": "nvarchar"
+					},
+					{
+						"name": "vendor_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "pickup_datetime",
+						"type": "nvarchar"
+					},
+					{
+						"name": "payment_type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "fare_amount",
+						"type": "nvarchar"
+					},
+					{
+						"name": "surcharge",
+						"type": "nvarchar"
+					},
+					{
+						"name": "mta_tax",
+						"type": "nvarchar"
+					},
+					{
+						"name": "tip_amount",
+						"type": "nvarchar"
+					},
+					{
+						"name": "tolls_amount",
+						"type": "nvarchar"
+					},
+					{
+						"name": "total_amount",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "TripFares"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDBLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TripDataAzureDB')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -190,34 +339,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Gen2')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDLSLS",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "products.csv",
-						"fileSystem": "dbtripdata"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDLSLS')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/ADLSGen2')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -278,6 +399,159 @@
 				"typeProperties": {}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/JoinandAggregate')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "TripDataAzureDB",
+								"type": "DatasetReference"
+							},
+							"name": "TripdataCSV"
+						},
+						{
+							"dataset": {
+								"referenceName": "TripAzurFaresDB",
+								"type": "DatasetReference"
+							},
+							"name": "TripFaresSQL"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "AzureSynapseAnalyticsTable1",
+								"type": "DatasetReference"
+							},
+							"name": "gen2sink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "InnerJoinwithTripFares"
+						},
+						{
+							"name": "AggregateByPaymentType"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          medallion as string,",
+						"          hack_license as string,",
+						"          vendor_id as string,",
+						"          rate_code as string,",
+						"          store_and_fwd_flag as string,",
+						"          pickup_datetime as string,",
+						"          dropoff_datetime as string,",
+						"          passenger_count as string,",
+						"          trip_time_in_secs as string,",
+						"          trip_distance as string,",
+						"          pickup_longitude as string,",
+						"          pickup_latitude as string,",
+						"          dropoff_longitude as string,",
+						"          dropoff_latitude as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> TripdataCSV",
+						"source(output(",
+						"          medallion as string,",
+						"          hack_license as string,",
+						"          vendor_id as string,",
+						"          pickup_datetime as string,",
+						"          payment_type as string,",
+						"          fare_amount as string,",
+						"          surcharge as string,",
+						"          mta_tax as string,",
+						"          tip_amount as string,",
+						"          tolls_amount as string,",
+						"          total_amount as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> TripFaresSQL",
+						"TripdataCSV, TripFaresSQL join(TripdataCSV@medallion == TripFaresSQL@medallion",
+						"     && TripdataCSV@hack_license == TripFaresSQL@hack_license",
+						"     && TripdataCSV@vendor_id == TripFaresSQL@vendor_id",
+						"     && TripdataCSV@pickup_datetime == TripFaresSQL@pickup_datetime,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> InnerJoinwithTripFares",
+						"InnerJoinwithTripFares aggregate(groupBy(payment_type),",
+						"     average_fare = avg(toInteger(total_amount)),",
+						"          total_trip_distance = sum(toInteger(trip_distance))) ~> AggregateByPaymentType",
+						"AggregateByPaymentType sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     recreate:true,",
+						"     format: 'table',",
+						"     staged: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> gen2sink"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/TripDataAzureDB')]",
+				"[concat(variables('factoryId'), '/datasets/TripAzurFaresDB')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSynapseAnalytics1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"server": "[parameters('AzureSynapseAnalytics1_properties_typeProperties_server')]",
+					"database": "[parameters('AzureSynapseAnalytics1_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureSynapseAnalytics1_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureSynapseAnalytics1_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSynapseAnalyticsTable1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "AggregatedTaxiData"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
 		}
 	]
 }

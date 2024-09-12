@@ -14,6 +14,9 @@
 		"AzureDLSLS_accountKey": {
 			"value": ""
 		},
+		"AzureSynapseAnalytics1_password": {
+			"value": ""
+		},
 		"AzureDBLS_properties_typeProperties_server": {
 			"value": "adfgen2.database.windows.net"
 		},
@@ -25,6 +28,15 @@
 		},
 		"AzureDLSLS_properties_typeProperties_url": {
 			"value": "https://dbtogen2.dfs.core.windows.net/"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_server": {
+			"value": "wsgen2-ondemand.sql.azuresynapse.net"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_database": {
+			"value": "SQLDW"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_userName": {
+			"value": "sivasai"
 		},
 		"containerUri": {
 			"value": ""
