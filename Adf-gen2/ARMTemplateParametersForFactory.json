@@ -37,6 +37,12 @@
 		},
 		"AzureSynapseAnalytics1_properties_typeProperties_userName": {
 			"value": "sivasai"
+		},
+		"AzureSynapseAnalytics2_properties_typeProperties_server": {
+			"value": "wsgen2.sql.azuresynapse.net"
+		},
+		"AzureSynapseAnalytics2_properties_typeProperties_database": {
+			"value": "Synapse123"
 		}
 	}
 }
