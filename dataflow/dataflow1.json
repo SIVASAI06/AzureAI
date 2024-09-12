@@ -95,7 +95,9 @@
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
 				"join1 select(mapColumn(",
-				"          SalesOrderID = SourceOrderHeader@SalesOrderID",
+				"          SalesOrderID = SourceOrderHeader@SalesOrderID,",
+				"          SalesOrderDetailID = SourceOrderDetails@SalesOrderID,",
+				"          OrderDate",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> ColumnScrubber"
