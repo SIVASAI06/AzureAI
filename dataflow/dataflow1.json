@@ -113,7 +113,8 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> ColumnScrubber",
 				"ColumnScrubber derive(TotalDue = toDouble(round(TotalDue,2))) ~> ValueScrubber",
-				"ValueScrubber aggregate() ~> CreateArrays"
+				"ValueScrubber aggregate(groupBy(SalesOrderID),",
+				"     details = ERROR_FUNCTION('')) ~> CreateArrays"
 			]
 		}
 	}
