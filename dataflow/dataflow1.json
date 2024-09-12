@@ -19,7 +19,11 @@
 					"name": "SourceOrderHeader"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "TypeCast"
@@ -115,7 +119,11 @@
 				"ColumnScrubber derive(TotalDue = toDouble(round(TotalDue,2))) ~> ValueScrubber",
 				"ValueScrubber aggregate(groupBy(SalesOrderID),",
 				"     details = collect(orderdetailsstruct),",
-				"          each(match(instr(name, 'OrderQty')==0&&instr(name, 'UnitPrice')==0&&instr(name,'SalesOrderID')==0), $$ = first($$))) ~> CreateArrays"
+				"          each(match(instr(name, 'OrderQty')==0&&instr(name, 'UnitPrice')==0&&instr(name,'SalesOrderID')==0), $$ = first($$))) ~> CreateArrays",
+				"CreateArrays sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
