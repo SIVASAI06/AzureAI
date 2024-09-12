@@ -1,0 +1,14 @@
+{
+	"name": "AzureSynapseAnalytics2",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDW",
+		"typeProperties": {
+			"server": "wsgen2.sql.azuresynapse.net",
+			"database": "Synapse123",
+			"encrypt": "mandatory",
+			"trustServerCertificate": true,
+			"authenticationType": "SystemAssignedManagedIdentity"
+		}
+	}
+}
