@@ -5,14 +5,38 @@
 		"typeProperties": {
 			"sources": [
 				{
+					"dataset": {
+						"referenceName": "AdvworksLS",
+						"type": "DatasetReference"
+					},
 					"name": "SourceOrderDetails"
+				},
+				{
+					"name": "source1"
 				}
 			],
 			"sinks": [],
 			"transformations": [],
 			"scriptLines": [
+				"source(output(",
+				"          SalesOrderID as integer,",
+				"          SalesOrderDetailID as integer,",
+				"          CarrierTrackingNumber as string,",
+				"          OrderQty as integer,",
+				"          ProductID as integer,",
+				"          SpecialOfferID as integer,",
+				"          UnitPrice as decimal(19,4),",
+				"          UnitPriceDiscount as decimal(19,4),",
+				"          LineTotal as decimal(38,6),",
+				"          rowguid as string,",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> SourceOrderDetails",
 				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> SourceOrderDetails"
+				"     validateSchema: false) ~> source1"
 			]
 		}
 	}
