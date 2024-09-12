@@ -34,7 +34,7 @@
 					"name": "ColumnScrubber"
 				},
 				{
-					"name": "derivedColumn1"
+					"name": "ValueScrubber"
 				}
 			],
 			"scriptLines": [
@@ -109,7 +109,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> ColumnScrubber",
-				"ColumnScrubber derive() ~> derivedColumn1"
+				"ColumnScrubber derive(TotalDue = ERROR_FUNCTION('')) ~> ValueScrubber"
 			]
 		}
 	}
