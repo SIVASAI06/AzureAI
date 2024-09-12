@@ -97,7 +97,10 @@
 				"join1 select(mapColumn(",
 				"          SalesOrderID = SourceOrderHeader@SalesOrderID,",
 				"          SalesOrderDetailID = SourceOrderDetails@SalesOrderID,",
-				"          OrderDate",
+				"          OrderDate,",
+				"          Status,",
+				"          SalesOrderNumber,",
+				"          ShipMethod = ShipMethodID",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> ColumnScrubber"
