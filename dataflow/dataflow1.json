@@ -26,6 +26,9 @@
 				},
 				{
 					"name": "MakeStruct"
+				},
+				{
+					"name": "join1"
 				}
 			],
 			"scriptLines": [
@@ -80,9 +83,14 @@
 				"     query: 'select * from [Sales].[SalesOrderHeader]',",
 				"     format: 'query') ~> SourceOrderHeader",
 				"SourceOrderDetails derive(UnitPrice = toDouble(round(UnitPrice,2))) ~> TypeCast",
-				"TypeCast derive(orderfdetailsstruct = @(orderqty=,",
-				"          unitcost,",
-				"          unitcost=)) ~> MakeStruct"
+				"TypeCast derive(orderfdetailsstruct = @(orderqty=1,",
+				"          unitcost=1,",
+				"          salesorderdetailid=1)) ~> MakeStruct",
+				"SourceOrderHeader, MakeStruct join(SourceOrderHeader@SalesOrderID == SourceOrderDetails@SalesOrderID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1"
 			]
 		}
 	}
