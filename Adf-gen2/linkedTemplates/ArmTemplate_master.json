@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ADLSGen2'"
 		},
+		"AzureDBAdvworksLS_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureDBAdvworksLS'"
+		},
 		"AzureDBLS_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'AzureDBLS'"
@@ -22,6 +26,22 @@
 		"AzureSynapseAnalytics1_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'AzureSynapseAnalytics1'"
+		},
+		"CosmosDbLS_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'CosmosDbLS'"
+		},
+		"AzureDBAdvworksLS_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "dssquad.database.windows.net"
+		},
+		"AzureDBAdvworksLS_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "AdventureWorks2022"
+		},
+		"AzureDBAdvworksLS_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sivasai"
 		},
 		"AzureDBLS_properties_typeProperties_server": {
 			"type": "string",
@@ -89,6 +109,9 @@
 					"ADLSGen2_connectionString": {
 						"value": "[parameters('ADLSGen2_connectionString')]"
 					},
+					"AzureDBAdvworksLS_password": {
+						"value": "[parameters('AzureDBAdvworksLS_password')]"
+					},
 					"AzureDBLS_password": {
 						"value": "[parameters('AzureDBLS_password')]"
 					},
@@ -97,6 +120,18 @@
 					},
 					"AzureSynapseAnalytics1_password": {
 						"value": "[parameters('AzureSynapseAnalytics1_password')]"
+					},
+					"CosmosDbLS_connectionString": {
+						"value": "[parameters('CosmosDbLS_connectionString')]"
+					},
+					"AzureDBAdvworksLS_properties_typeProperties_server": {
+						"value": "[parameters('AzureDBAdvworksLS_properties_typeProperties_server')]"
+					},
+					"AzureDBAdvworksLS_properties_typeProperties_database": {
+						"value": "[parameters('AzureDBAdvworksLS_properties_typeProperties_database')]"
+					},
+					"AzureDBAdvworksLS_properties_typeProperties_userName": {
+						"value": "[parameters('AzureDBAdvworksLS_properties_typeProperties_userName')]"
 					},
 					"AzureDBLS_properties_typeProperties_server": {
 						"value": "[parameters('AzureDBLS_properties_typeProperties_server')]"

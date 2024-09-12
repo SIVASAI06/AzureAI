@@ -8,6 +8,9 @@
 		"ADLSGen2_connectionString": {
 			"value": ""
 		},
+		"AzureDBAdvworksLS_password": {
+			"value": ""
+		},
 		"AzureDBLS_password": {
 			"value": ""
 		},
@@ -16,6 +19,18 @@
 		},
 		"AzureSynapseAnalytics1_password": {
 			"value": ""
+		},
+		"CosmosDbLS_connectionString": {
+			"value": ""
+		},
+		"AzureDBAdvworksLS_properties_typeProperties_server": {
+			"value": "dssquad.database.windows.net"
+		},
+		"AzureDBAdvworksLS_properties_typeProperties_database": {
+			"value": "AdventureWorks2022"
+		},
+		"AzureDBAdvworksLS_properties_typeProperties_userName": {
+			"value": "sivasai"
 		},
 		"AzureDBLS_properties_typeProperties_server": {
 			"value": "adfgen2.database.windows.net"

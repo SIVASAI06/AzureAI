@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ADLSGen2'"
 		},
+		"AzureDBAdvworksLS_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureDBAdvworksLS'"
+		},
 		"AzureDBLS_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'AzureDBLS'"
@@ -22,6 +26,22 @@
 		"AzureSynapseAnalytics1_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'AzureSynapseAnalytics1'"
+		},
+		"CosmosDbLS_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'CosmosDbLS'"
+		},
+		"AzureDBAdvworksLS_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "dssquad.database.windows.net"
+		},
+		"AzureDBAdvworksLS_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "AdventureWorks2022"
+		},
+		"AzureDBAdvworksLS_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sivasai"
 		},
 		"AzureDBLS_properties_typeProperties_server": {
 			"type": "string",
@@ -175,6 +195,152 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "DbtoCosmosSchema",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DBtoCosmos",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SourceOrderDetails": {},
+									"SourceOrderHeader": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DBtoCosmos')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AdvworksLS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDBAdvworksLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SalesOrderID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SalesOrderDetailID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CarrierTrackingNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "OrderQty",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "ProductID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SpecialOfferID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "UnitPrice",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "UnitPriceDiscount",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "LineTotal",
+						"type": "decimal",
+						"precision": 38,
+						"scale": 6
+					},
+					{
+						"name": "rowguid",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "Sales",
+					"table": "SalesOrderDetail"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDBAdvworksLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDbNoSqlContainer1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CosmosDbLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbSqlApiCollection",
+				"schema": {},
+				"typeProperties": {
+					"collectionName": "Items"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDbLS')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Gen2')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -182,6 +348,9 @@
 				"linkedServiceName": {
 					"referenceName": "AzureDLSLS",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Project-1"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -211,6 +380,9 @@
 					"referenceName": "AzureSynapseAnalytics2",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "Project-1"
+				},
 				"annotations": [],
 				"type": "AzureSqlDWTable",
 				"schema": [],
@@ -231,6 +403,9 @@
 				"linkedServiceName": {
 					"referenceName": "AzureDBLS",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Project-1"
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
@@ -297,6 +472,9 @@
 				"linkedServiceName": {
 					"referenceName": "AzureDBLS",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Project-1"
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
@@ -381,6 +559,28 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureDBAdvworksLS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('AzureDBAdvworksLS_properties_typeProperties_server')]",
+					"database": "[parameters('AzureDBAdvworksLS_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureDBAdvworksLS_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDBAdvworksLS_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureDBLS')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -459,6 +659,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDbLS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "CosmosDb",
+				"typeProperties": {
+					"connectionString": "[parameters('CosmosDbLS_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/SelfHostedIR')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -467,6 +680,162 @@
 				"typeProperties": {}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DBtoCosmos')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "AdvworksLS",
+								"type": "DatasetReference"
+							},
+							"name": "SourceOrderDetails"
+						},
+						{
+							"dataset": {
+								"referenceName": "AdvworksLS",
+								"type": "DatasetReference"
+							},
+							"name": "SourceOrderHeader"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "CosmosDbNoSqlContainer1",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "TypeCast"
+						},
+						{
+							"name": "MakeStruct"
+						},
+						{
+							"name": "join1"
+						},
+						{
+							"name": "ColumnScrubber"
+						},
+						{
+							"name": "ValueScrubber"
+						},
+						{
+							"name": "CreateArrays"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          SalesOrderID as integer,",
+						"          SalesOrderDetailID as integer,",
+						"          CarrierTrackingNumber as string,",
+						"          OrderQty as integer,",
+						"          ProductID as integer,",
+						"          SpecialOfferID as integer,",
+						"          UnitPrice as decimal(19,4),",
+						"          UnitPriceDiscount as decimal(19,4),",
+						"          LineTotal as decimal(38,6),",
+						"          rowguid as string,",
+						"          ModifiedDate as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> SourceOrderDetails",
+						"source(output(",
+						"          SalesOrderID as integer,",
+						"          RevisionNumber as integer,",
+						"          OrderDate as timestamp,",
+						"          DueDate as timestamp,",
+						"          ShipDate as timestamp,",
+						"          Status as integer,",
+						"          OnlineOrderFlag as boolean,",
+						"          SalesOrderNumber as string,",
+						"          PurchaseOrderNumber as string,",
+						"          AccountNumber as string,",
+						"          CustomerID as integer,",
+						"          SalesPersonID as integer,",
+						"          TerritoryID as integer,",
+						"          BillToAddressID as integer,",
+						"          ShipToAddressID as integer,",
+						"          ShipMethodID as integer,",
+						"          CreditCardID as integer,",
+						"          CreditCardApprovalCode as string,",
+						"          CurrencyRateID as integer,",
+						"          SubTotal as decimal(19,4),",
+						"          TaxAmt as decimal(19,4),",
+						"          Freight as decimal(19,4),",
+						"          TotalDue as decimal(19,4),",
+						"          Comment as string,",
+						"          rowguid as string,",
+						"          ModifiedDate as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     query: 'select * from [Sales].[SalesOrderHeader]',",
+						"     format: 'query') ~> SourceOrderHeader",
+						"SourceOrderDetails derive(UnitPrice = toDouble(round(UnitPrice,2))) ~> TypeCast",
+						"TypeCast derive(orderfdetailsstruct = @(orderqty=1,",
+						"          unitcost=1,",
+						"          salesorderdetailid=1)) ~> MakeStruct",
+						"SourceOrderHeader, MakeStruct join(SourceOrderHeader@SalesOrderID == SourceOrderDetails@SalesOrderID,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1 select(mapColumn(",
+						"          SalesOrderID = SourceOrderHeader@SalesOrderID,",
+						"          SalesOrderDetailID = SourceOrderDetails@SalesOrderID,",
+						"          OrderDate,",
+						"          Status,",
+						"          SalesOrderNumber,",
+						"          ShipMethod = ShipMethodID,",
+						"          TotalDue,",
+						"          orderdetailsstruct = orderfdetailsstruct",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> ColumnScrubber",
+						"ColumnScrubber derive(TotalDue = toDouble(round(TotalDue,2))) ~> ValueScrubber",
+						"ValueScrubber aggregate(groupBy(SalesOrderID),",
+						"     details = collect(orderdetailsstruct),",
+						"          each(match(instr(name,'OrderQty')==0&&instr(name,'UnitPrice')==0&&instr(name,'SalesOrderID')==0), $$ = first($$))) ~> CreateArrays",
+						"CreateArrays sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'document',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     mapColumn(",
+						"          SalesOrderID,",
+						"          details,",
+						"          SalesOrderDetailID,",
+						"          OrderDate,",
+						"          Status,",
+						"          SalesOrderNumber,",
+						"          ShipMethod,",
+						"          TotalDue,",
+						"          orderdetailsstruct",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/AdvworksLS')]",
+				"[concat(variables('factoryId'), '/datasets/CosmosDbNoSqlContainer1')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/JoinandAggregate')]",
