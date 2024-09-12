@@ -115,7 +115,7 @@
 				"ColumnScrubber derive(TotalDue = toDouble(round(TotalDue,2))) ~> ValueScrubber",
 				"ValueScrubber aggregate(groupBy(SalesOrderID),",
 				"     details = collect(orderdetailsstruct),",
-				"          each(match(), ERROR_FUNCTION('') = ERROR_FUNCTION(''))) ~> CreateArrays"
+				"          each(match(ERROR_FUNCTION('instr()name, __SINGLE_QUOTE__OrderQty__SINGLE_QUOTE__)==0&&instr(name, __SINGLE_QUOTE__UnitPrice__SINGLE_QUOTE__)==0&&instr(name,__SINGLE_QUOTE__SalesOrderID__SINGLE_QUOTE__)==0')), ERROR_FUNCTION('') = ERROR_FUNCTION(''))) ~> CreateArrays"
 			]
 		}
 	}
