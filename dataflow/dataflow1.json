@@ -31,7 +31,7 @@
 					"name": "join1"
 				},
 				{
-					"name": "select1"
+					"name": "ColumnScrubber"
 				}
 			],
 			"scriptLines": [
@@ -95,47 +95,10 @@
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
 				"join1 select(mapColumn(",
-				"          SalesOrderID = SourceOrderHeader@SalesOrderID,",
-				"          RevisionNumber,",
-				"          OrderDate,",
-				"          DueDate,",
-				"          ShipDate,",
-				"          Status,",
-				"          OnlineOrderFlag,",
-				"          SalesOrderNumber,",
-				"          PurchaseOrderNumber,",
-				"          AccountNumber,",
-				"          CustomerID,",
-				"          SalesPersonID,",
-				"          TerritoryID,",
-				"          BillToAddressID,",
-				"          ShipToAddressID,",
-				"          ShipMethodID,",
-				"          CreditCardID,",
-				"          CreditCardApprovalCode,",
-				"          CurrencyRateID,",
-				"          SubTotal,",
-				"          TaxAmt,",
-				"          Freight,",
-				"          TotalDue,",
-				"          Comment,",
-				"          rowguid = SourceOrderHeader@rowguid,",
-				"          ModifiedDate = SourceOrderHeader@ModifiedDate,",
-				"          SalesOrderID = SourceOrderDetails@SalesOrderID,",
-				"          SalesOrderDetailID,",
-				"          CarrierTrackingNumber,",
-				"          OrderQty,",
-				"          ProductID,",
-				"          SpecialOfferID,",
-				"          UnitPrice,",
-				"          UnitPriceDiscount,",
-				"          LineTotal,",
-				"          rowguid = SourceOrderDetails@rowguid,",
-				"          ModifiedDate = SourceOrderDetails@ModifiedDate,",
-				"          orderfdetailsstruct",
+				"          SalesOrderID = SourceOrderHeader@SalesOrderID",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1"
+				"     skipDuplicateMapOutputs: true) ~> ColumnScrubber"
 			]
 		}
 	}
