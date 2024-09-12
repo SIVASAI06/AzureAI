@@ -5,6 +5,9 @@
 			"referenceName": "AzureDBLS",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "Project-1"
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
