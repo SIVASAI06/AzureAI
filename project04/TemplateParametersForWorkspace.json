@@ -1,0 +1,69 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "project04"
+		},
+		"ADLSGen2_connectionString": {
+			"value": ""
+		},
+		"AzureDBAdvworksLS_password": {
+			"value": ""
+		},
+		"AzureDBLS_password": {
+			"value": ""
+		},
+		"AzureDLSLS_accountKey": {
+			"value": ""
+		},
+		"AzureSynapseAnalytics1_password": {
+			"value": ""
+		},
+		"CosmosDbLS_connectionString": {
+			"value": ""
+		},
+		"project04-WorkspaceDefaultSqlServer_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:project04.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"AzureDBAdvworksLS_properties_typeProperties_server": {
+			"value": "dssquad.database.windows.net"
+		},
+		"AzureDBAdvworksLS_properties_typeProperties_database": {
+			"value": "AdventureWorks2022"
+		},
+		"AzureDBAdvworksLS_properties_typeProperties_userName": {
+			"value": "sivasai"
+		},
+		"AzureDBLS_properties_typeProperties_server": {
+			"value": "adfgen2.database.windows.net"
+		},
+		"AzureDBLS_properties_typeProperties_database": {
+			"value": "taxi-data"
+		},
+		"AzureDBLS_properties_typeProperties_userName": {
+			"value": "sivasai"
+		},
+		"AzureDLSLS_properties_typeProperties_url": {
+			"value": "https://dbtogen2.dfs.core.windows.net/"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_server": {
+			"value": "wsgen2-ondemand.sql.azuresynapse.net"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_database": {
+			"value": "SQLDW"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_userName": {
+			"value": "sivasai"
+		},
+		"AzureSynapseAnalytics2_properties_typeProperties_server": {
+			"value": "wsgen2.sql.azuresynapse.net"
+		},
+		"AzureSynapseAnalytics2_properties_typeProperties_database": {
+			"value": "Synapse123"
+		},
+		"project04-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://sasql4.dfs.core.windows.net"
+		}
+	}
+}
