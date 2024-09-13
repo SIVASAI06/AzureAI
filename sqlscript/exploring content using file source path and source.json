@@ -1,0 +1,17 @@
+{
+	"name": "exploring content using file source path and source",
+	"properties": {
+		"content": {
+			"query": "SELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'NYCTripSmall.parquet',\n        DATA_SOURCE = 'ContosoLake1',\n        FORMAT = 'PARQUET'\n    ) AS [result];\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "DataExplorationDB",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

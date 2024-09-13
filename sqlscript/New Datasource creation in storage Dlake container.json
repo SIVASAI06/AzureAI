@@ -1,0 +1,17 @@
+{
+	"name": "New Datasource creation in storage Dlake container",
+	"properties": {
+		"content": {
+			"query": "CREATE EXTERNAL DATA SOURCE ContosoLake1\nWITH ( LOCATION = 'https://contosolake.dfs.core.windows.net')",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "DataExplorationDB",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
