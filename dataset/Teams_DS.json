@@ -1,0 +1,39 @@
+{
+	"name": "Teams_DS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "HTTPLS",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "HTTPSOURCE_DS_5"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "Teams.csv"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Name",
+				"type": "String"
+			},
+			{
+				"name": "NOC",
+				"type": "String"
+			},
+			{
+				"name": "Discipline",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
